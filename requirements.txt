@@ -1,0 +1,7 @@
+mcp==1.28.1
+langchain-mcp-adapters==0.3.0
+langgraph==1.2.9
+langchain-ollama==1.1.0
+langchain-core==1.4.9
+streamlit==1.59.2
+python-dotenv==1.1.0

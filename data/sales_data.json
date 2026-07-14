@@ -1,0 +1,26 @@
+{
+  "month": "July 2026",
+  "team_name": "Field Sales Team - North & West Zone",
+  "records": [
+    {"id": 1,  "name": "Rohit Sharma",   "region": "North", "target": 500000, "achieved": 610000},
+    {"id": 2,  "name": "Ananya Iyer",    "region": "South", "target": 450000, "achieved": 470000},
+    {"id": 3,  "name": "Vikram Singh",   "region": "North", "target": 550000, "achieved": 400000},
+    {"id": 4,  "name": "Priya Nair",     "region": "West",  "target": 480000, "achieved": 520000},
+    {"id": 5,  "name": "Karan Mehta",    "region": "East",  "target": 500000, "achieved": 350000},
+    {"id": 6,  "name": "Sneha Reddy",    "region": "South", "target": 460000, "achieved": 610000},
+    {"id": 7,  "name": "Arjun Kapoor",   "region": "North", "target": 520000, "achieved": 500000},
+    {"id": 8,  "name": "Divya Menon",    "region": "West",  "target": 470000, "achieved": 430000},
+    {"id": 9,  "name": "Rahul Verma",    "region": "East",  "target": 510000, "achieved": 540000},
+    {"id": 10, "name": "Neha Joshi",     "region": "South", "target": 490000, "achieved": 460000},
+    {"id": 11, "name": "Aditya Rao",     "region": "North", "target": 500000, "achieved": 720000},
+    {"id": 12, "name": "Meera Pillai",   "region": "West",  "target": 460000, "achieved": 300000},
+    {"id": 13, "name": "Suresh Kumar",   "region": "East",  "target": 500000, "achieved": 505000},
+    {"id": 14, "name": "Kavya Nambiar",  "region": "South", "target": 470000, "achieved": 480000},
+    {"id": 15, "name": "Aman Gupta",     "region": "North", "target": 500000, "achieved": 250000},
+    {"id": 16, "name": "Ishita Sharma",  "region": "West",  "target": 480000, "achieved": 490000},
+    {"id": 17, "name": "Vivek Chandran", "region": "East",  "target": 510000, "achieved": 530000},
+    {"id": 18, "name": "Pooja Desai",    "region": "South", "target": 460000, "achieved": 465000},
+    {"id": 19, "name": "Rajesh Iyer",    "region": "North", "target": 500000, "achieved": 610000},
+    {"id": 20, "name": "Anjali Nair",    "region": "West",  "target": 470000, "achieved": 440000}
+  ]
+}
