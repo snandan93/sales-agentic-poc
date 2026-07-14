@@ -1,10 +1,20 @@
 import unittest
 from types import SimpleNamespace
 
-from observability import summarize_trace
+from observability import summarize_trace, unpack_ask_result
 
 
 class ObservabilityTests(unittest.TestCase):
+    def test_accepts_legacy_two_item_ask_result(self):
+        answer, history, metrics = unpack_ask_result(("answer", ["message"]))
+        self.assertEqual(answer, "answer")
+        self.assertEqual(history, ["message"])
+        self.assertIsNone(metrics)
+
+    def test_accepts_current_three_item_ask_result(self):
+        self.assertEqual(unpack_ask_result(("answer", [], {"total_tokens": 1})),
+                         ("answer", [], {"total_tokens": 1}))
+
     def test_summarizes_tokens_and_calls(self):
         messages = [
             SimpleNamespace(

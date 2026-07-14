@@ -28,3 +28,13 @@ def summarize_trace(messages: list, elapsed_seconds: float) -> dict:
             name = getattr(message, "name", None) or "unknown_tool"
             metrics["tool_names"].append(name)
     return metrics
+
+
+def unpack_ask_result(result: tuple) -> tuple:
+    """Accept both the current 3-item result and the pre-observability 2-item result."""
+    if len(result) == 3:
+        return result
+    if len(result) == 2:
+        answer, history = result
+        return answer, history, None
+    raise ValueError(f"Unexpected ask() result length: {len(result)}")

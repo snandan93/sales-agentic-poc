@@ -15,6 +15,7 @@ layering.
 import asyncio
 import streamlit as st
 from graph import build_graph, ask, OLLAMA_MODEL
+from observability import unpack_ask_result
 
 st.set_page_config(page_title="Sales Performance Agent", page_icon="📊", layout="centered")
 
@@ -87,6 +88,7 @@ if "pending_question" in st.session_state:
     question = st.session_state.pop("pending_question")
 
 if question:
+    metrics = None
     st.session_state.display_messages.append(("user", question))
     with st.chat_message("user"):
         st.markdown(question)
@@ -95,24 +97,24 @@ if question:
         with st.spinner("Checking the numbers..."):
             try:
                 app = get_app()
-                answer, updated_history, metrics = asyncio.run(
-                    ask(app, question, st.session_state.history)
+                answer, updated_history, metrics = unpack_ask_result(
+                    asyncio.run(ask(app, question, st.session_state.history))
                 )
                 st.session_state.history = updated_history
             except Exception as e:
                 try:
                     app = get_app(force_rebuild=True)
-                    answer, updated_history, metrics = asyncio.run(
-                        ask(app, question, st.session_state.history)
+                    answer, updated_history, metrics = unpack_ask_result(
+                        asyncio.run(ask(app, question, st.session_state.history))
                     )
                     st.session_state.history = updated_history
                 except Exception as e2:
                     answer = (
                         f"⚠️ Couldn't reach the agent: {e2}\n\n"
-                        "Make sure Ollama is running locally (`ollama serve`) and that "
-                        f"the model set in `OLLAMA_MODEL` has been pulled (e.g. `ollama pull {OLLAMA_MODEL}`)."
+                        "Restart Streamlit after pulling the latest code. If the error continues, "
+                        "make sure Ollama is running (`ollama serve`) and the configured model "
+                        f"has been pulled (`ollama pull {OLLAMA_MODEL}`)."
                     )
-                    metrics = None
         st.markdown(answer)
         if metrics:
             with st.expander("Execution details"):
