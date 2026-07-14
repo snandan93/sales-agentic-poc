@@ -31,6 +31,9 @@ SUGGESTIONS = [
     "Who reached their target?",
     "Who missed their target and by how much?",
     "How is each region performing?",
+    "Which product is performing best?",
+    "Compare our Direct, Partner, and Inside Sales channels.",
+    "How is CRM Suite performing in the North region?",
 ]
 
 
