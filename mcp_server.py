@@ -22,21 +22,21 @@ mcp = FastMCP("SalesDataServer")
 
 
 @mcp.tool()
-def get_team_target() -> dict:
-    """Get this month's overall team sales target, total achieved, and % completion."""
-    return du.team_target_summary()
+def get_team_target(region: str | None = None, product: str | None = None, channel: str | None = None) -> dict:
+    """Get team performance, optionally filtered by region, product, and channel."""
+    return du.team_target_summary(region, product, channel)
 
 
 @mcp.tool()
-def get_top_performer(n: int = 1) -> list:
-    """Get the top N performing sales reps this month, ranked by % of target achieved."""
-    return du.top_performer(n)
+def get_top_performer(n: int = 1, region: str | None = None) -> list:
+    """Get up to 100 top performers, optionally for one region."""
+    return du.top_performer(n, region)
 
 
 @mcp.tool()
-def get_bottom_performer(n: int = 1) -> list:
+def get_bottom_performer(n: int = 1, region: str | None = None) -> list:
     """Get the bottom N performing sales reps this month, ranked by % of target achieved. Useful for identifying who needs coaching support."""
-    return du.bottom_performer(n)
+    return du.bottom_performer(n, region)
 
 
 @mcp.tool()
@@ -46,33 +46,39 @@ def get_average_performer() -> dict:
 
 
 @mcp.tool()
-def get_who_reached_target() -> list:
-    """List every sales rep who met or exceeded their target this month, sorted best first."""
-    return du.who_reached_target()
+def get_who_reached_target(page: int = 1, page_size: int = 25) -> dict:
+    """Get a paginated list of reps who met target, sorted best first."""
+    return du.who_reached_target(page, page_size)
 
 
 @mcp.tool()
-def get_who_missed_target() -> list:
-    """List every sales rep who did NOT reach their target this month, sorted worst first."""
-    return du.who_missed_target()
+def get_who_missed_target(page: int = 1, page_size: int = 25) -> dict:
+    """Get a paginated list of reps who missed target, sorted worst first."""
+    return du.who_missed_target(page, page_size)
 
 
 @mcp.tool()
-def get_individual_performance(name: str) -> list:
-    """Look up one sales rep's target, achieved and achievement % by name (partial name match is fine)."""
-    return du.individual_performance(name)
+def get_individual_performance(query: str, page: int = 1, page_size: int = 25) -> dict:
+    """Find reps by partial name or exact employee code, with pagination."""
+    return du.individual_performance(query, page, page_size)
 
 
 @mcp.tool()
 def get_region_breakdown() -> dict:
-    """Get target vs achieved rolled up by region (North/South/East/West)."""
+    """Get target vs achieved rolled up by region."""
     return du.region_breakdown()
 
 
 @mcp.tool()
-def get_full_leaderboard() -> list:
-    """Get every sales rep ranked from best to worst by achievement %."""
-    return du.full_leaderboard()
+def get_dimension_breakdown(dimension: str = "region") -> dict:
+    """Roll up results by region, product, channel, city, or manager."""
+    return du.dimension_breakdown(dimension)
+
+
+@mcp.tool()
+def get_full_leaderboard(page: int = 1, page_size: int = 25) -> dict:
+    """Get one leaderboard page; page size is capped at 100."""
+    return du.full_leaderboard(page, page_size)
 
 
 if __name__ == "__main__":

@@ -24,9 +24,10 @@ English with the actual figures — never a guess.
 
 | File | Layer | What it does |
 |---|---|---|
-| `data/sales_data.json` | Data | 20 sample sales reps: name, region, target, achieved |
+| `data/sales_data.json` | Data | 1,000 deterministic sales-rep performance records |
+| `scripts/generate_sales_data.py` | Data generation | Rebuilds the sample dataset with a fixed seed |
 | `data_utils.py` | Business logic | Pure Python analytics (no framework deps) — testable on its own |
-| `mcp_server.py` | Tools (MCP) | Wraps `data_utils.py` as 9 MCP tools over stdio |
+| `mcp_server.py` | Tools (MCP) | Exposes filtered, paginated analytics as MCP tools over stdio |
 | `graph.py` | Orchestration | LangGraph agent: Ollama ↔ MCP tools, loops until it has an answer |
 | `app.py` | Frontend | Streamlit chat UI |
 
@@ -39,6 +40,8 @@ Out of the box (and anything phrased similarly):
 - "Who reached their target?"
 - "Who missed their target?" *(added — useful for coaching conversations)*
 - "How is each region doing?" *(added — regional rollups)*
+- "Compare products/channels/cities/managers"
+- "How is North performing for CRM Suite through Direct sales?"
 - "How is [rep name] doing?"
 - "Show me the full leaderboard"
 
@@ -80,13 +83,29 @@ streamlit run app.py
 
 ```bash
 python data_utils.py     # sanity-checks the analytics logic, no LLM needed
+python -m unittest discover -s tests -v
 python mcp_server.py     # runs the MCP server standalone (Ctrl+C to quit)
 ```
 
+## Data flow and scale
+
+The checked-in dataset contains 1,000 records with employee code, geography,
+manager, product, channel, target, and achieved revenue. It is deterministic,
+so it can be regenerated without random diffs:
+
+```bash
+python scripts/generate_sales_data.py
+```
+
+`data_utils.py` validates the schema and record count when the file changes,
+then caches the parsed JSON. Aggregations always use the full dataset. Large
+person-level results are paginated (25 by default, 100 maximum) before crossing
+the MCP boundary, which keeps tool results small enough for a local LLM.
+
 ## Extending it
 
-- **More data**: just add rows to `data/sales_data.json` — everything else
-  reads from it dynamically.
+- **More data**: change `RECORD_COUNT` in `scripts/generate_sales_data.py`,
+  regenerate the JSON, and run the tests.
 - **More tools**: add a function to `data_utils.py`, then expose it with a
   `@mcp.tool()` wrapper in `mcp_server.py`. No changes needed in `graph.py`
   — new tools are picked up automatically.
