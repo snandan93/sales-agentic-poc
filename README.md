@@ -49,6 +49,11 @@ The agent can combine these too, e.g. "How far is the bottom performer from
 target, and which region are they in?" — it will call more than one tool if
 needed.
 
+The sidebar includes an observability panel with input/output/total token
+counts, local Ollama invocation count, MCP tool-call count, tool names, and
+elapsed time. Each assistant response also has an **Execution details** panel.
+Ollama runs locally, so these are not paid cloud API calls.
+
 ## Setup
 
 **1. Install Ollama and pull a tool-calling capable model** (one-time):

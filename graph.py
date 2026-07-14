@@ -19,6 +19,7 @@ Requires:
 """
 
 import os
+from time import perf_counter
 from typing import Annotated, TypedDict
 
 from dotenv import load_dotenv
@@ -27,6 +28,7 @@ from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode, tools_condition
 from langchain_ollama import ChatOllama
 from langchain_mcp_adapters.client import MultiServerMCPClient
+from observability import summarize_trace
 
 load_dotenv()
 
@@ -93,14 +95,18 @@ async def ask(app, question: str, history: list | None = None):
     """
     Run one question through the compiled graph.
     `history` is a list of prior LangChain messages (for multi-turn chat).
-    Returns (answer_text, updated_message_history).
+    Returns (answer_text, updated_message_history, execution_metrics).
     """
     from langchain_core.messages import SystemMessage, HumanMessage
 
     messages = history[:] if history else [SystemMessage(content=SYSTEM_PROMPT)]
     messages.append(HumanMessage(content=question))
 
+    trace_start = len(messages)
+    started_at = perf_counter()
     result = await app.ainvoke({"messages": messages})
+    elapsed_seconds = perf_counter() - started_at
     updated_history = result["messages"]
     answer = updated_history[-1].content
-    return answer, updated_history
+    metrics = summarize_trace(updated_history[trace_start:], elapsed_seconds)
+    return answer, updated_history, metrics
